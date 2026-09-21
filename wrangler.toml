@@ -1,0 +1,8 @@
+name = "freshers-2026-platform"
+compatibility_date = "2025-09-01"
+
+# Bind a Cloudflare D1 database named FRESHERS_DB in the Pages project settings.
+# Apply migrations with: npx wrangler d1 migrations apply FRESHERS_DB --remote
+
+[vars]
+ORGANISER_ID = "NIKHIL_2515082"
