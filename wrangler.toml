@@ -1,0 +1,33 @@
+name = "freshers2026-umu"
+compatibility_date = "2024-09-01"
+compatibility_flags = ["nodejs_compat"]
+
+# Cloudflare Pages / Workers with OpenNext
+# Build command: npm run build
+# For Cloudflare Pages, use @cloudflare/next-on-pages
+
+[vars]
+NODE_VERSION = "20"
+
+# For Cloudflare Workers with OpenNext, uncomment:
+# main = ".open-next/worker.js"
+
+# R2 bucket for media (images)
+# [[r2_buckets]]
+# binding = "MEDIA_BUCKET"
+# bucket_name = "freshers2026-media"
+
+# D1 database alternative to PostgreSQL (optional)
+# [[d1_databases]]
+# binding = "DB"
+# database_name = "freshers2026"
+# database_id = "your-d1-id"
+
+# Environment variables — set via Cloudflare dashboard or .dev.vars
+# DATABASE_URL = PostgreSQL connection string (Neon/Supabase)
+# RAZORPAY_KEY_ID = rzp_live_xxx
+# RAZORPAY_KEY_SECRET = xxx
+# JWT_SECRET = long random string (32+ chars)
+
+[build]
+command = "npm run build"

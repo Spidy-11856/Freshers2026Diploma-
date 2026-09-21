@@ -1,0 +1,191 @@
+// Prisma schema for PostgreSQL — production database
+// In development, the file-based JSON DB (src/lib/db.ts) is used for sandbox/demo
+// For production on Cloudflare/Vercel with PostgreSQL (Neon/Supabase), run: npx prisma migrate dev
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Student {
+  id                 String   @id @default(cuid())
+  name               String
+  registrationNumber String   @unique
+  branch             String
+  yearSemester       String
+  phone              String
+  email              String
+  type               String // FRESHER | SENIOR
+  createdAt          DateTime @default(now())
+  passes             Pass[]
+  culturalApplications CulturalApplication[]
+}
+
+model Pass {
+  id                 String   @id @default(cuid())
+  passCode           String   @unique
+  qrToken            String   @unique
+  type               String
+  name               String
+  registrationNumber String
+  branch             String
+  yearSemester       String
+  phone              String
+  email              String
+  priceOriginal      Int
+  discount           Int
+  priceFinal         Int
+  couponCode         String?
+  razorpayOrderId    String?
+  razorpayPaymentId  String?
+  status             String
+  used               Boolean  @default(false)
+  usedAt             DateTime?
+  usedBy             String?
+  paymentStatus      String
+  createdAt          DateTime @default(now())
+  payments           Payment[]
+  qrScans            QrScan[]
+
+  @@index([registrationNumber])
+  @@index([qrToken])
+}
+
+model Payment {
+  id                String   @id @default(cuid())
+  passId            String?
+  razorpayOrderId   String   @unique
+  razorpayPaymentId String?  @unique
+  amount            Int
+  currency          String   @default("INR")
+  status            String
+  couponCode        String?
+  createdAt         DateTime @default(now())
+  pass              Pass?    @relation(fields: [passId], references: [id])
+}
+
+model Coupon {
+  id               String   @id @default(cuid())
+  code             String   @unique
+  discountType     String // PERCENTAGE | FIXED
+  discountValue    Int
+  expiryDate       DateTime
+  usageLimit       Int
+  perUserLimit     Int
+  minimumPurchase  Int
+  active           Boolean  @default(true)
+  usedCount        Int      @default(0)
+  createdAt        DateTime @default(now())
+  usages           CouponUsage[]
+}
+
+model CouponUsage {
+  id        String   @id @default(cuid())
+  couponId  String
+  email     String
+  usedAt    DateTime @default(now())
+  coupon    Coupon   @relation(fields: [couponId], references: [id])
+
+  @@unique([couponId, email])
+}
+
+model CulturalApplication {
+  id                String   @id @default(cuid())
+  name              String
+  registrationNumber String
+  branch            String
+  phone             String
+  email             String
+  eventType         String // DANCE | DRAMA | SINGING
+  performanceName   String
+  participants      Int
+  description       String
+  status            String   @default("PENDING")
+  coordinatorName   String?
+  coordinatorPhone  String?
+  performanceDate   String?
+  performanceTime   String?
+  performanceOrder  Int?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+}
+
+model Organiser {
+  id           String   @id @default(cuid())
+  username     String   @unique
+  email        String   @unique
+  passwordHash String
+  role         String // SUPER_ADMIN | ORGANISER | SCANNER
+  displayName  String
+  idPassCode   String?  @unique
+  createdAt    DateTime @default(now())
+}
+
+model EventSettings {
+  id                String   @id @default(cuid())
+  eventName         String
+  eventYear         String
+  university        String
+  heroHeading       String
+  heroAccent        String
+  heroSubtitle      String
+  eventDate         String
+  eventTime         String
+  venue             String
+  passPrice         Int
+  eventDescription  String
+  announcement      String
+  coordinatorName   String
+  coordinatorPhone  String
+  coordinatorEmail  String
+  socialLinks       Json?
+  faq               Json?
+  heroImage         String?
+  culturalImages    Json?
+  gallery           Json?
+  updatedAt         DateTime @updatedAt
+}
+
+model Announcement {
+  id        String   @id @default(cuid())
+  title     String
+  content   String
+  published Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Media {
+  id        String   @id @default(cuid())
+  url       String
+  type      String // hero | cultural | gallery
+  key       String? // R2/S3 key
+  uploadedBy String?
+  createdAt DateTime @default(now())
+}
+
+model QrScan {
+  id        String   @id @default(cuid())
+  passCode  String
+  qrToken   String
+  scannedAt DateTime @default(now())
+  scannedBy String
+  result    String
+  pass      Pass     @relation(fields: [passCode], references: [passCode])
+
+  @@index([passCode])
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  action    String
+  actor     String
+  details   String
+  timestamp DateTime @default(now())
+
+  @@index([action])
+}
