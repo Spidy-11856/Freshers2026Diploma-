@@ -1,59 +1,63 @@
 "use client";
 import { useState } from "react";
 import Link from "next/link";
-import { Menu, X, HelpCircle } from "lucide-react";
+import { Menu, X, HelpCircle, ChevronDown } from "lucide-react";
 
 export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const nav = [
-    { label: "Home", href: "/" },
-    { label: "Events", href: "/#culture" },
-    { label: "Passes", href: "/get-pass" },
-    { label: "Participate", href: "/#culture" },
-    { label: "Info", href: "/#info" },
-    { label: "Contact", href: "/#contact" },
+    { label: "Home", href: "/", hasDropdown: true },
+    { label: "Events", href: "/#culture", hasDropdown: true },
+    { label: "Passes", href: "/get-pass", hasDropdown: true },
+    { label: "Participate", href: "/#culture", hasDropdown: true },
+    { label: "Info", href: "/#info", hasDropdown: true },
+    { label: "Contact", href: "/#contact", hasDropdown: false },
   ];
 
   return (
-    <header className="sticky top-0 z-50 border-b border-white/[0.06] bg-[#050505]/80 backdrop-blur-xl">
-      <div className="mx-auto flex max-w-[1280px] items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
-        {/* Logo */}
+    <header className="sticky top-0 z-50 border-b border-white/[0.06] bg-[#050505]/85 backdrop-blur-xl">
+      <div className="mx-auto flex max-w-[1280px] items-center justify-between px-4 py-3.5 sm:px-6 lg:px-8">
+        {/* Logo - minimalist as reference */}
         <Link href="/" className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-[#C9A227] to-[#E5C76B] text-sm font-black leading-none text-black">
-            UM
+          <div className="flex h-8 w-8 items-center justify-center bg-white text-black">
+            {/* geometric logo like reference */}
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+              <rect x="2" y="2" width="8" height="8" fill="currentColor" />
+              <rect x="12" y="2" width="10" height="4" fill="currentColor" opacity="0.7" />
+              <rect x="12" y="8" width="4" height="10" fill="currentColor" opacity="0.7" />
+            </svg>
           </div>
           <div className="leading-none">
-            <div className="text-[11px] font-bold tracking-[0.18em] text-[#E8E8E8]">USHA MARTIN</div>
-            <div className="text-[10px] font-medium tracking-[0.14em] text-[#BFC0C2]">University</div>
-            <div className="mt-0.5 text-[9px] tracking-[0.12em] text-[#C9A227]">DIPLOMA ENGINEERING</div>
+            <div className="text-[12px] font-bold tracking-[-0.01em] text-white">Usha Martin</div>
+            <div className="text-[12px] font-bold tracking-[-0.01em] text-white">University</div>
           </div>
         </Link>
 
-        {/* Center nav - desktop */}
+        {/* Center nav - desktop - exact reference style */}
         <nav className="hidden items-center gap-1 lg:flex">
           {nav.map((n) => (
             <Link
               key={n.label}
               href={n.href}
-              className="rounded-full px-4 py-2 text-[13px] font-medium tracking-wide text-[#BFC0C2] transition hover:bg-white/[0.06] hover:text-white"
+              className="flex items-center gap-1 rounded-full px-3.5 py-2 text-[13px] font-medium tracking-[-0.01em] text-[#E8E8E8] transition hover:text-white"
             >
               {n.label}
+              {n.hasDropdown && <ChevronDown className="h-3 w-3 opacity-60" />}
             </Link>
           ))}
         </nav>
 
         {/* Right */}
-        <div className="hidden items-center gap-3 lg:flex">
-          <Link href="/#contact" className="flex items-center gap-1.5 text-sm font-medium text-[#BFC0C2] hover:text-white">
-            <HelpCircle className="h-4 w-4" />
+        <div className="hidden items-center gap-4 lg:flex">
+          <Link href="/#contact" className="text-sm font-medium text-[#E8E8E8] hover:text-white">
             Help
           </Link>
           <Link
             href="/get-pass"
             className="btn-gold rounded-full px-6 py-2.5 text-sm"
           >
-            <span>GET MY PASS</span>
+            <span>Get My Pass</span>
           </Link>
         </div>
 

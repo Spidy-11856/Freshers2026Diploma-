@@ -22,8 +22,7 @@ export default async function HomePage() {
       <SecondaryNav />
       <CulturalSection />
       <InfoStrip date={settings.eventDate} venue={settings.venue} />
-      <HowItWorks />
-      <Announcements items={announcements} />
+      {/* Event Details - after info strip like reference */}
       <section className="bg-[#050505] px-4 py-10 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-[1280px]">
           <div className="rounded-[24px] border border-[#C9A227]/20 bg-gradient-to-br from-[#151515] to-[#0D0D0D] p-8 sm:p-10">
@@ -64,6 +63,8 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
+      <HowItWorks />
+      <Announcements items={announcements} />
       <FAQ items={settings.faq} />
       <Footer coordinatorName={settings.coordinatorName} coordinatorPhone={settings.coordinatorPhone} coordinatorEmail={settings.coordinatorEmail} />
     </main>
